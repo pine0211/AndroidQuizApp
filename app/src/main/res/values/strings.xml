@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">卒業制作用クイズアプリ</string>
+    <string name="app_start">タップでスタート</string>
+    <string name="select_quiz">問題選択</string>
+</resources>

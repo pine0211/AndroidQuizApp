@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/brownBack"
+    android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@color/greenBack"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+        <ScrollView
+                android:isScrollContainer="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                    <TextView
+                        android:id="@+id/drill"
+                        style="@style/TextViewStyleLarge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <Button
+                        android:id="@+id/btnPlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="40dp"
+                        android:background="@drawable/button_design"
+                        android:onClick="btnPlay"
+                        android:text="再生"
+                        android:textColor="@color/stringWhite"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/ans"
+                        style="@style/TextViewStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitCenter"
+                        android:background="@color/clearButtonPressed"
+                         />
+
+
+                    <RadioGroup
+                        android:id="@+id/rGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rdBtn1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/stringWhite"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rdBtn2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/stringWhite" />
+
+                        <RadioButton
+                            android:id="@+id/rdBtn3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/stringWhite" />
+
+                        <RadioButton
+                            android:id="@+id/rdBtn4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/stringWhite" />
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="40dp"
+                        android:background="@drawable/button_design"
+                        android:textColor="@color/stringWhite"
+                        android:onClick="btnNext"
+                        android:text="次へ" />
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+</LinearLayout>
