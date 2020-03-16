@@ -277,7 +277,7 @@ public class MathQuizActivity extends AppCompatActivity {
                         break;
                     case 4:
                         //回答3
-                        num4 = ans +wrongList.get(2);
+                        num4 = ans + wrongList.get(2);
                         num.add(String.valueOf(num4));
                         break;
                     default:

@@ -117,9 +117,14 @@ public class ImageQuizActivity extends AppCompatActivity {
             SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
             ContentValues values = new ContentValues();
             SQLiteDatabase dbw = helper.getWritableDatabase();
+
             values.put("score", ansCount);
-            dbw.update("resultdb", values, "_id = 3", null);
+            dbw.update("resultdb"
+                    , values
+                    , "_id = 3"
+                    , null);
             dbw.close();
+
             //結果画面へ
             Intent i = new Intent(this, ResultActivity.class);
             startActivity(i);
