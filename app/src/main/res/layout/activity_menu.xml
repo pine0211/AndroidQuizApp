@@ -33,9 +33,9 @@
                 android:layout_gravity="center"
                 android:background="@drawable/button_design"
                 android:onClick="btnNext"
-                android:text="次へ"
+                android:text="@string/btn_next"
                 android:textColor="@color/stringWhite"
-                />
+                android:visibility="gone" />
 
 
         </LinearLayout>

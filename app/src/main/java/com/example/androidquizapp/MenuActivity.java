@@ -7,59 +7,68 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class MenuActivity extends AppCompatActivity {
-    private ArrayAdapter<String> Adapter;
-    private ListView list;
-    int rootNum;
-    private TextView tv;
-    private ArrayList<String> data;
+
+    private ArrayAdapter<String> Adapter;//アダプター
+    private int rootNum;//メニューの問題番号
+    private TextView tv;//テキストビュー
+    private Button btnNext;//次へボタン
+    //各問題を配列化
+    private final static String[] questions={
+            "地理問題","計算問題","画像問題","音当て問題"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        list = findViewById(R.id.quizList);
+        //問題文リストレイアウトの編集用アダプター
+        final ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(
+                this,R.layout.list);
+
+        //使用するViewの呼び出し
+        ListView _list = findViewById(R.id.quizList);
+        btnNext=findViewById(R.id.btnNext);
         tv = findViewById(R.id.tv);
-        tv.setText(R.string.app_name);
 
-        data = new ArrayList<>();
+        tv.setText(R.string.app_name);//タイトル文
 
-        data.add("地理問題");
-        data.add("計算問題");
-        data.add("画像問題");
-        data.add("音当て問題");
-        Adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                data);
-        list.setAdapter(Adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //アダプターに問題タイトルを格納
+        for (String str:questions) {
+            arrayAdapter.add(str);
+        }
+
+        _list.setAdapter(arrayAdapter);
+
+        //リスナーを設定
+        _list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent,
                                     View view, int position,
                                     long id) {
                 CharSequence msg = ((TextView) view).getText();
-                int pos = Adapter.getPosition((String) msg);
+                int pos = arrayAdapter.getPosition((String) msg);
+                //いずれかの問題が選択されたら次へ進むボタンを表示
+                btnNext.setVisibility(View.VISIBLE);
+                //nootNumに押されたボタンを割り当てて内容を表示
                 switch (pos) {
                     case 0:
-                        tv.setText(Adapter.getItem(position));
+                        tv.setText(arrayAdapter.getItem(position));
                         rootNum = 1;
                         break;
                     case 1:
-                        tv.setText(Adapter.getItem(position));
+                        tv.setText(arrayAdapter.getItem(position));
                         rootNum = 2;
                         break;
                     case 2:
-                        tv.setText(Adapter.getItem(position));
+                        tv.setText(arrayAdapter.getItem(position));
                         rootNum = 3;
                         break;
                     case 3:
-                        tv.setText(Adapter.getItem(position));
+                        tv.setText(arrayAdapter.getItem(position));
                         rootNum = 4;
                         break;
                 }
@@ -67,8 +76,13 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 次へボタンをタップした際の処理
+     * @param view
+     */
     public void btnNext(View view) {
         if (rootNum != 0) {
+            //インテントにアクティビティを振り分けrootNumで制御
             switch (rootNum) {
                 case 1:
                     Intent intent1 = new Intent(

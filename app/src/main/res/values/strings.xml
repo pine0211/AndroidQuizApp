@@ -1,5 +1,25 @@
 <resources>
-    <string name="app_name">卒業制作用クイズアプリ</string>
+    <string name="app_name">sQuiiiiz</string>
     <string name="app_start">タップでスタート</string>
-    <string name="select_quiz">問題選択</string>
+    <string name="menu_title">問題選択</string>
+    <string name="q_str">地理問題</string>
+    <string name="q_math">計算問題</string>
+    <string name="q_img">画像問題</string>
+    <string name="q_sound">音当て問題</string>
+    <string name="menu_string">都道府県に関する地理問題です、\n
+        4つの選択肢から適切なものを選んでください。</string>
+    <string name="menu_math">ランダムに出題される計算問題です、\n
+        4つの選択肢から適切なものを選んでください。</string>
+    <string name="menu_img">画像から犬種を当てる問題です、\n
+        4つの選択肢から適切なものを選んでください。</string>
+    <string name="menu_sound">鳴き声から鳥の種類を当てる問題です、\n
+        4つの選択肢から適切なものを選んでください。</string>
+    <string name="btn_next">次へ</string>
+    <string name="btn_play">再生</string>
+    <string name="data_name">名無し</string>
+    <string name="btn_db_del">削除</string>
+    <string name="finish">現在の点数</string>
+    <string name="msg_del">点数データを削除しました</string>
+
+
 </resources>

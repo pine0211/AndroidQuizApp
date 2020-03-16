@@ -8,10 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="TextViewStyle">
+        <item name="android:layout_marginTop">10dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:textStyle">italic</item>
         <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">center_horizontal</item>
+
+    </style>
+    <style name="TextViewStyleMedium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:layout_margin">10dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center_horizontal</item>
 

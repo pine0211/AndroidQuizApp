@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/brownBack"
@@ -37,7 +38,7 @@
                         android:layout_margin="40dp"
                         android:background="@drawable/button_design"
                         android:onClick="btnPlay"
-                        android:text="再生"
+                        android:text="@string/btn_play"
                         android:textColor="@color/stringWhite"
                         android:visibility="gone" />
 
@@ -102,7 +103,8 @@
                         android:background="@drawable/button_design"
                         android:textColor="@color/stringWhite"
                         android:onClick="btnNext"
-                        android:text="次へ" />
+                        android:text="@string/btn_next"
+                        tools:targetApi="o" />
 
 
                 </LinearLayout>
