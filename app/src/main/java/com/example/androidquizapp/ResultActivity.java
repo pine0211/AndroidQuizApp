@@ -93,7 +93,7 @@ public class ResultActivity extends AppCompatActivity {
         deleteDatabase(helper.getDatabaseName());
         Context context=getApplicationContext();
         deleteDatabase(helper.getDatabaseName());
-        Toast.makeText(context,R.string.msg_del,Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.msg_del,Toast.LENGTH_SHORT).show();
         resultView.setVisibility(View.GONE);
 
     }

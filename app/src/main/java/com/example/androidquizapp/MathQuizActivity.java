@@ -252,18 +252,35 @@ public class MathQuizActivity extends AppCompatActivity {
                         break;
                     case 2:
                         //回答1
-                        num2 = ans + wrongList.get(0);
-                        num.add(String.valueOf(num2));
+                        int check = r.nextInt(2);
+                        if (check == 0) {
+                            num2 = ans + wrongList.get(0);
+                            num.add(String.valueOf(num2));
+                        } else if (check == 1) {
+                            num2 = ans - wrongList.get(0);
+                            num.add(String.valueOf(num2));
+                        }
                         break;
                     case 3:
                         //回答2
-                        num3 = ans + wrongList.get(1);
-                        num.add(String.valueOf(num3));
-                        break;
+                        int check2 = r.nextInt(2);
+                        if (check2 == 0) {
+                            num3 = ans + wrongList.get(1);
+                            num.add(String.valueOf(num3));
+                        } else if (check2 == 1) {
+                            num3 = ans - wrongList.get(1);
+                            num.add(String.valueOf(num3));
+                        }
                     case 4:
                         //回答3
-                        num4 = ans +wrongList.get(2);
-                        num.add(String.valueOf(num4));
+                        int check3 = r.nextInt(2);
+                        if (check3 == 0) {
+                            num4 = ans + wrongList.get(2);
+                            num.add(String.valueOf(num4));
+                        } else if (check3 == 1) {
+                            num4 = ans - wrongList.get(2);
+                            num.add(String.valueOf(num4));
+                        }
                         break;
                     default:
                 }
