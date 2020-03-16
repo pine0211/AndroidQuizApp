@@ -34,13 +34,6 @@ public class ResultActivity extends AppCompatActivity {
         resultView = findViewById(R.id.res_list);
         del = findViewById(R.id.btn_delete);
 
-        //DB名
-        //カラム名
-        //WHERE句の列名
-        //WHERE句の値
-        //GROUP BY句の値
-        //HAVING句の値
-        //ORDER BY句の値
         Cursor cursor = db.query("resultdb",//DB名
                 new String[]{"title", "score"},//カラム名
                 null,//WHERE句の列名
