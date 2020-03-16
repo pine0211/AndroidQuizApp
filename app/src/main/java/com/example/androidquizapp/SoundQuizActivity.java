@@ -1,9 +1,5 @@
 package com.example.androidquizapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +12,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +44,7 @@ public class SoundQuizActivity extends AppCompatActivity {
             {"この鳴き声の鳥は？\n", "ウミネコ", "カラス", "ニワトリ", "スズメ"}
     };
     //ArrayList名qArrayを作成
-    ArrayList<ArrayList<String>> qArray = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> qArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class SoundQuizActivity extends AppCompatActivity {
             dbw.update("resultdb", values, "_id = 4", null);
             dbw.close();
             //結果画面へ
-            Intent i=new Intent(this,ResultActivity.class);
+            Intent i=new Intent(this, ResultActivity.class);
             startActivity(i);
             finish();
             //まだ問題が残っている場合
@@ -129,7 +129,7 @@ public class SoundQuizActivity extends AppCompatActivity {
 
     /**
      * 再生ボタンが押された時の処理
-     * @param view
+     * @param view view
      */
     public void btnPlay(View view) {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);

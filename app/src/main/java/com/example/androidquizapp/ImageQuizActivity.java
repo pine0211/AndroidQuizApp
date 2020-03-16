@@ -1,9 +1,5 @@
 package com.example.androidquizapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class ImageQuizActivity extends AppCompatActivity {
     private int ansCount;//正解数
 
     //ArrayList名qArrayを作成
-    ArrayList<ArrayList<String>> qArray = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> qArray = new ArrayList<>();
 
     //問題文と解答をつなげた配列qTextを作成
     private final String[][] qText = {
@@ -117,14 +117,9 @@ public class ImageQuizActivity extends AppCompatActivity {
             SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
             ContentValues values = new ContentValues();
             SQLiteDatabase dbw = helper.getWritableDatabase();
-
             values.put("score", ansCount);
-            dbw.update("resultdb"
-                    , values
-                    , "_id = 3"
-                    , null);
+            dbw.update("resultdb", values, "_id = 3", null);
             dbw.close();
-
             //結果画面へ
             Intent i = new Intent(this, ResultActivity.class);
             startActivity(i);

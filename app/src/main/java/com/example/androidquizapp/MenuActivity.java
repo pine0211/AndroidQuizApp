@@ -1,7 +1,5 @@
 package com.example.androidquizapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -27,14 +27,14 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         //問題文リストレイアウトの編集用アダプター
         final ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(
-                this,R.layout.list);
+                this, R.layout.list);
 
         //使用するViewの呼び出し
         ListView _list = findViewById(R.id.quizList);
         btnNext=findViewById(R.id.btnNext);
         tv = findViewById(R.id.tv);
 
-        tv.setText(R.string.app_name);//タイトル文
+        tv.setText(R.string.menu_title);//タイトル文
 
         //アダプターに問題タイトルを格納
         for (String str:questions) {
@@ -53,7 +53,7 @@ public class MenuActivity extends AppCompatActivity {
                 int pos = arrayAdapter.getPosition((String) msg);
                 //いずれかの問題が選択されたら次へ進むボタンを表示
                 btnNext.setVisibility(View.VISIBLE);
-                //nootNumに押されたボタンを割り当てて内容を表示
+                //rootNumに押されたボタンを割り当てて内容を表示
                 switch (pos) {
                     case 0:
                         tv.setText(arrayAdapter.getItem(position));
@@ -78,7 +78,7 @@ public class MenuActivity extends AppCompatActivity {
 
     /**
      * 次へボタンをタップした際の処理
-     * @param view
+     * @param view view
      */
     public void btnNext(View view) {
         if (rootNum != 0) {

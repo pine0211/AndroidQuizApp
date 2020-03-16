@@ -1,7 +1,5 @@
 package com.example.androidquizapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +7,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity{
-    private TextView tv;//スタート画面テキスト
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +17,8 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         //ビューを用意し点滅表示を設定
-        tv = findViewById(R.id.drill);
+        //スタート画面テキスト
+        TextView tv = findViewById(R.id.drill);
 
         blinkText(tv, 1000, 500);
     }
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
     /**
      * 画面をタップしてメニューへ進む処理
      *
-     * @param view
+     * @param view view
      */
     public void onStartClick(View view) {
         Intent i = new Intent(MainActivity.this, MenuActivity.class);

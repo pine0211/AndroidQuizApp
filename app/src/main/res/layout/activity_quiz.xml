@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:scaleType="fitCenter"
                         android:background="@color/clearButtonPressed"
-                         />
+                        android:contentDescription="" />
 
 
                     <RadioGroup

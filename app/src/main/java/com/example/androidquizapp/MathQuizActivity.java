@@ -1,9 +1,5 @@
 package com.example.androidquizapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +10,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,23 +30,10 @@ public class MathQuizActivity extends AppCompatActivity {
     private RadioGroup rGroup;
     private RadioButton btn1, btn2, btn3, btn4;
 
-    //ランダム生成する2つの値
-    private ArrayList<ArrayList<Integer>> randNum;
-    //生成された値の並び替え
-    private ArrayList<ArrayList<Integer>> randInt;
-    //答えと問題文を生成する
-    private ArrayList<ArrayList<ArrayList<String>>> answer;
-    //四則演算のどれを使うかをランダム化
-    private ArrayList<Integer> Qnum;
-    //問題数分の正解をまとめる
-    private ArrayList<ArrayList<String>> Anum;
-    //表示する問題文と回答項目を格納
-    private ArrayList<ArrayList<String>> AnsGroup;
-
     private int ansCount;//正解数をカウント
-    private Random r = new Random();//ランダム処理
+    private final Random r = new Random();//ランダム処理
 
-    private int qLength = 5;//問題数
+    private final int qLength = 5;//問題数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +122,8 @@ public class MathQuizActivity extends AppCompatActivity {
         //解答ボタンを選択するまで「次へ」を隠す
         next.setVisibility(View.GONE);
         //問題用のランダム数値2つを5問分用意
-        randNum = new ArrayList<ArrayList<Integer>>();
+        //ランダム生成する2つの値
+        ArrayList<ArrayList<Integer>> randNum = new ArrayList<>();
         for (int i = 0; i < qLength; i++) {//問題数分作成
             ArrayList<Integer> rnum = new ArrayList<>();
             for (int j = 0; j < 2; j++) {
@@ -144,24 +132,24 @@ public class MathQuizActivity extends AppCompatActivity {
             randNum.add(rnum);
         }
         //数値2つのうち大きい方を最初に置く
-        randInt = new ArrayList<ArrayList<Integer>>();
+        //生成された値の並び替え
+        ArrayList<ArrayList<Integer>> randInt = new ArrayList<>();
         for (int i = 0; i < qLength; i++) {
             ArrayList<Integer> num = new ArrayList<>();
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
-                    num.add(Math.max(randNum.get(i).get(j)
-                            , randNum.get(i).get(j + 1)));
+                    num.add(Math.max(randNum.get(i).get(j), randNum.get(i).get(j + 1)));
                 } else {
-                    num.add(Math.min(randNum.get(i).get(j)
-                            , randNum.get(i).get(j - 1)));
+                    num.add(Math.min(randNum.get(i).get(j), randNum.get(i).get(j - 1)));
                 }
                 randInt.add(num);
             }
         }
         //答えと問題文テンプレートを問題数分用意
-        answer = new ArrayList<ArrayList<ArrayList<String>>>();
+        //答えと問題文を生成する
+        ArrayList<ArrayList<ArrayList<String>>> answer = new ArrayList<>();
         for (int i = 0; i < qLength; i++) {
-            ArrayList<ArrayList<String>> numlist = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> numlist = new ArrayList<>();
             //4種類の問題
             for (int j = 0; j < 4; j++) {
                 ArrayList<String> ansStr = new ArrayList<>();
@@ -189,33 +177,27 @@ public class MathQuizActivity extends AppCompatActivity {
                         switch (j) {
                             case 0:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0)
-                                                + randInt.get(i).get(1)));
+                                        randInt.get(i).get(0) + randInt.get(i).get(1)));
                                 break;
                             case 1:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0)
-                                                - randInt.get(i).get(1)));
+                                        randInt.get(i).get(0) - randInt.get(i).get(1)));
                                 break;
                             case 2:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0)
-                                                * randInt.get(i).get(1)));
+                                        randInt.get(i).get(0) * randInt.get(i).get(1)));
                                 break;
                             case 3:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0)
-                                                / randInt.get(i).get(1)));
+                                        randInt.get(i).get(0) / randInt.get(i).get(1)));
                                 break;
                         }
-                    } else if (k == 2) {
+                    } else {
                         //割り算をintで扱うための小数点切り捨て表示
-                        switch (j) {
-                            case 3:
-                                ansStr.add("\n*小数点以下は切り捨てとする。");
-                                break;
-                            default:
-                                ansStr.add("");
+                        if (j == 3) {
+                            ansStr.add("\n*小数点以下は切り捨てとする。");
+                        } else {
+                            ansStr.add("");
                         }
                     }
                 }
@@ -224,20 +206,22 @@ public class MathQuizActivity extends AppCompatActivity {
             answer.add(numlist);
         }
         //問題4種類のどれを選ぶかランダム化
-        Qnum = new ArrayList<Integer>();
+        //四則演算のどれを使うかをランダム化
+        ArrayList<Integer> qnum = new ArrayList<>();
         for (int i = 0; i < qLength; i++) {
-            Qnum.add(r.nextInt(4));
+            qnum.add(r.nextInt(4));
         }
         //問題数分の正解を用意
-        Anum = new ArrayList<>();
+        //問題数分の正解をまとめる
+        ArrayList<ArrayList<String>> anum = new ArrayList<>();
         for (int i = 0; i < qLength; i++) {
             ArrayList<String> num = new ArrayList<>();
             for (int j = 0; j < 4; j++) {
-                num.add(answer.get(i).get(Qnum.get(count)).get(1));
+                num.add(answer.get(i).get(qnum.get(count)).get(1));
             }
-            Anum.add(num);
+            anum.add(num);
         }
-        //問題文誤回答生成用のランダム数をリスト化し重複防止のシャッフル処理
+        //問題文誤回答生成用のランダム数をリスト化
         ArrayList<Integer> wrongList = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             wrongList.add(i);
@@ -245,21 +229,22 @@ public class MathQuizActivity extends AppCompatActivity {
         Collections.shuffle(wrongList);
 
         //問題文と回答文を格納
-        AnsGroup = new ArrayList<ArrayList<String>>();
+        //表示する問題文と回答項目を格納
+        ArrayList<ArrayList<String>> ansGroup = new ArrayList<>();
         int ans, num2, num3, num4;
         for (int i = 0; i < qLength; i++) {
             ArrayList<String> num = new ArrayList<>();
             for (int j = 0; j < 5; j++) {
-                ans = Integer.parseInt(Anum.get(i).get(0));
+                ans = Integer.parseInt(anum.get(i).get(0));
 
                 switch (j) {
                     case 0:
                         //問題文
                         num.add(randInt.get(i).get(0)
-                                + answer.get(i).get(Qnum.get(count)).get(0)
+                                + answer.get(i).get(qnum.get(count)).get(0)
                                 + randInt.get(i).get(1)
                                 + "= ?\n"
-                                + answer.get(i).get(Qnum.get(count)).get(2));
+                                + answer.get(i).get(qnum.get(count)).get(2));
                         break;
                     case 1:
                         //正解
@@ -277,17 +262,17 @@ public class MathQuizActivity extends AppCompatActivity {
                         break;
                     case 4:
                         //回答3
-                        num4 = ans + wrongList.get(2);
+                        num4 = ans +wrongList.get(2);
                         num.add(String.valueOf(num4));
                         break;
                     default:
                 }
-                AnsGroup.add(num);
+                ansGroup.add(num);
             }
         }
 
         //AnsGroupのcount番目のデータを変数quizに入れておく
-        final ArrayList<String> quiz = AnsGroup.get(count);
+        final ArrayList<String> quiz = ansGroup.get(count);
 
         //問題文と解答用ボタンを表示し問題の番号表示
         Q.setVisibility(View.VISIBLE);

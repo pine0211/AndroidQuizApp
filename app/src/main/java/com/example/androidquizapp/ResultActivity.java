@@ -1,9 +1,5 @@
 package com.example.androidquizapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,16 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 public class ResultActivity extends AppCompatActivity {
     private TextView textView;
     private TextView resultView;
     private SQLOpenHelper helper;
     private int total;
-    private Cursor cursor;
-    private StringBuilder builder;
-    private ContentValues values;
-    private SQLiteDatabase db;
-    private SQLiteDatabase dbw;
     private Button del;
 
     @Override
@@ -31,15 +26,22 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         //DB作成
         helper = new SQLOpenHelper(getApplicationContext());
-        values = new ContentValues();
-        db = helper.getReadableDatabase();
-        dbw = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = helper.getReadableDatabase();
+        SQLiteDatabase dbw = helper.getWritableDatabase();
 
         textView = findViewById(R.id.res_finish);
         resultView = findViewById(R.id.res_list);
         del = findViewById(R.id.btn_delete);
 
-        cursor = db.query("resultdb",//DB名
+        //DB名
+        //カラム名
+        //WHERE句の列名
+        //WHERE句の値
+        //GROUP BY句の値
+        //HAVING句の値
+        //ORDER BY句の値
+        Cursor cursor = db.query("resultdb",//DB名
                 new String[]{"title", "score"},//カラム名
                 null,//WHERE句の列名
                 null,//WHERE句の値
@@ -48,7 +50,7 @@ public class ResultActivity extends AppCompatActivity {
                 null//ORDER BY句の値
         );
         cursor.moveToFirst();
-        builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < cursor.getCount() - 1; i++) {
             if (cursor.getInt(1) == -1) {
                 cursor.moveToNext();

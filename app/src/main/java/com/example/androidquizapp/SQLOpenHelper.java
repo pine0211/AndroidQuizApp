@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 //SQLiteで作成する点数管理用データベースヘルパー
 
-public class SQLOpenHelper extends SQLiteOpenHelper {
+class SQLOpenHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION=3;
 
@@ -54,7 +54,7 @@ public class SQLOpenHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-    public void saveData(SQLiteDatabase db, String title, int score){
+    private void saveData(SQLiteDatabase db, String title, int score){
         ContentValues values = new ContentValues();
         values.put("title", title);
         values.put("score", score);
