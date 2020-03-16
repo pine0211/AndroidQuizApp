@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,18 +27,15 @@ public class StringQuizActivity extends AppCompatActivity {
     private int count;//問題の配列番号
     //ラジオグループとボタン
     private RadioGroup rGroup;
-    private RadioButton btn1;
-    private RadioButton btn2;
-    private RadioButton btn3;
-    private RadioButton btn4;
+    private RadioButton btn1, btn2, btn3, btn4;
 
-    public int ansCount;//正解数
+    private int ansCount;//正解数
 
     //ArrayList名qArrayを作成
     ArrayList<ArrayList<String>> qArray = new ArrayList<>();
 
     //問題文と解答をつなげた配列qTextを作成
-    String[][] qText = {
+    private final String[][] qText = {
             {"次のうち一番面積が大きいのは？\n", "北海道", "岩手県", "福島県", "長野県"},
             {"次のうち一番人口が多いのは？\n", "東京都", "神奈川県", "大阪府", "愛知県"},
             {"次のうち一番長い川は？\n", "信濃川", "利根川", "石狩川", "最上川"},
@@ -59,11 +59,11 @@ public class StringQuizActivity extends AppCompatActivity {
         btn3 = findViewById(R.id.rdBtn3);
         btn4 = findViewById(R.id.rdBtn4);
 
-        //最初に案内文を表示
-        tv.setText("次へをタップで開始します。");
+        //タイトルと案内文を表示
+        tv.setText(R.string.q_str);
+        Q.setText(R.string.menu_string);
 
-        //問題に進むまで解答用ラジオボタンと問題文は非表示
-        Q.setVisibility(View.GONE);
+        //問題に進むまで解答用ラジオボタンは非表示
         rGroup.setVisibility(View.GONE);
 
         //問題番号と点数、解答文字列を初期化しておく
@@ -81,39 +81,46 @@ public class StringQuizActivity extends AppCompatActivity {
     /**
      * ActionBar内の「戻る」ボタンを押したときの処理
      *
-     * @param item
-     * @return
+     * @param item アクションバーのタップ判定
+     * @return タップ判定のtrue/false
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            finish();//タップしたら終了
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * 次へボタンをタップした際の処理     *
+     * 次へボタンをタップした際の処理
      *
-     * @param view
+     * @param view 次へボタンのタップ判定
      */
     public void btnNext(View view) {
         //前の問題に解答している場合
         if (pushAns != null) {
-            check();
+            check();//判定メソッドへ
         }
         //解答ボタンを選択するまで「次へ」を隠す
         next.setVisibility(View.GONE);
         //すべての問題を解き終わったら
         if (count >= qText.length) {
-            //問題文と解答ボタンを非表示にして合計点表示
-            Q.setVisibility(View.GONE);
-            rGroup.setVisibility(View.GONE);
-            tv.setText("全問終了\n" + ansCount + "点です。");
+            //DBに回答結果を書き込み
+            SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
+            ContentValues values = new ContentValues();
+            SQLiteDatabase dbw = helper.getWritableDatabase();
+            values.put("score", ansCount);
+            dbw.update("resultdb", values, "_id = 1", null);
+            dbw.close();
+            //結果画面へ
+            Intent i = new Intent(this, ResultActivity.class);
+            startActivity(i);
+            finish();
             //まだ問題が残っている場合
         } else {
-            question();
+            question();//問題生成メソッドへ
         }
     }
 
@@ -121,29 +128,29 @@ public class StringQuizActivity extends AppCompatActivity {
      * 問題がまだ残っている場合の処理
      */
     private void question() {
-
         //問題文と解答を順番に格納し、リストqArrayに送る
-        for (int i = 0; i < qText.length; i++) {
+        for (String[] string : qText) {
             ArrayList<String> tmpArray = new ArrayList<>();
-            tmpArray.add(qText[i][0]);
-            tmpArray.add(qText[i][1]);
-            tmpArray.add(qText[i][2]);
-            tmpArray.add(qText[i][3]);
-            tmpArray.add(qText[i][4]);
+            tmpArray.add(string[0]);
+            tmpArray.add(string[1]);
+            tmpArray.add(string[2]);
+            tmpArray.add(string[3]);
+            tmpArray.add(string[4]);
 
             qArray.add(tmpArray);
         }
         //qArrayのcount番目のデータを変数quizに入れておく
         final ArrayList<String> quiz = qArray.get(count);
+
         //問題文と解答用ボタンを表示し問題の番号表示
         Q.setVisibility(View.VISIBLE);
         rGroup.setVisibility(View.VISIBLE);
-        tv.setText("問題" + (count + 1));
-
+        String qNumber = "問題" + (count + 1);
+        tv.setText(qNumber);
         Q.setText(quiz.get(0));//問題文をセット
         trueAns = quiz.get(1);//正解をセット
-
         quiz.remove(0);//問題文を削除
+
         //残った正解と解答文の順番をシャッフル
         Collections.shuffle(quiz);
         //ボタンにセット
@@ -151,7 +158,7 @@ public class StringQuizActivity extends AppCompatActivity {
         btn2.setText(quiz.get(1));
         btn3.setText(quiz.get(2));
         btn4.setText(quiz.get(3));
-
+        //4択部分の分岐処理
         rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -169,8 +176,9 @@ public class StringQuizActivity extends AppCompatActivity {
                         pushAns = quiz.get(3);
 
                 }
-
+                //未選択でなければ
                 if (checkedId != -1) {
+                    //次へボタンを表示
                     next.setVisibility(View.VISIBLE);
                 }
             }
@@ -189,8 +197,6 @@ public class StringQuizActivity extends AppCompatActivity {
         count++;//次の問題番号に進める
         pushAns = null;//解答部分を初期化
         rGroup.clearCheck();//ボタン選択解除
-
-
     }
 
 }

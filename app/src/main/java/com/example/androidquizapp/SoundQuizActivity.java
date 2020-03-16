@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -27,22 +30,19 @@ public class SoundQuizActivity extends AppCompatActivity {
     //ラジオグループとボタン
     private RadioGroup rGroup;
     private RadioButton btn1, btn2, btn3, btn4;
-    private Button btnPlay;
-    private MediaPlayer mediaPlayer;
-    private Integer[] qSound;
-    public int ansCount;//正解数
+    private Button btnPlay;//再生ボタン
+    private MediaPlayer mediaPlayer;//再生プレイヤー
+    private Integer[] qSound;//ファイル格納用
+    private int ansCount;//正解数
 
     //問題文と解答をつなげた配列qTextを作成
-    private String[][] qText = {
+    private final String[][] qText = {
             {"この鳴き声の鳥は？\n", "カラス", "ニワトリ", "スズメ", "ウグイス"},
             {"この鳴き声の鳥は？\n", "ニワトリ", "スズメ", "ウグイス", "ウミネコ"},
             {"この鳴き声の鳥は？\n", "スズメ", "ウグイス", "ウミネコ", "カラス"},
             {"この鳴き声の鳥は？\n", "ウグイス", "ウミネコ", "カラス", "ニワトリ"},
             {"この鳴き声の鳥は？\n", "ウミネコ", "カラス", "ニワトリ", "スズメ"}
     };
-
-
-
     //ArrayList名qArrayを作成
     ArrayList<ArrayList<String>> qArray = new ArrayList<>();
 
@@ -62,11 +62,11 @@ public class SoundQuizActivity extends AppCompatActivity {
         btn4 = findViewById(R.id.rdBtn4);
         btnPlay = findViewById(R.id.btnPlay);
 
-        //最初に案内文を表示
-        tv.setText("次へをタップで開始します。");
+        //タイトルと案内文を表示
+        tv.setText(R.string.q_sound);
+        Q.setText(R.string.menu_sound);
 
-        //問題に進むまで解答用ラジオボタンと問題文と再生ボタンは非表示
-        Q.setVisibility(View.GONE);
+        //問題に進むまで解答用ラジオボタンと再生ボタンは非表示
         rGroup.setVisibility(View.GONE);
 
         //問題番号と点数、解答文字列を初期化しておく
@@ -84,53 +84,63 @@ public class SoundQuizActivity extends AppCompatActivity {
     /**
      * ActionBar内の「戻る」ボタンを押したときの処理
      *
-     * @param item
-     * @return
+     * @param item アクションバーのタップ判定
+     * @return タップ判定のtrue/false
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            finish();//タップしたら終了
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * 次へボタンをタップした際の処理     *
+     * 次へボタンをタップした際の処理
      *
-     * @param view
+     * @param view 次へボタンのタップ判定
      */
     public void btnNext(View view) {
         //前の問題に解答している場合
         if (pushAns != null) {
-            check();
+            check();//判定メソッドへ
         }
         //解答ボタンを選択するまで「次へ」を隠す
         next.setVisibility(View.GONE);
         //すべての問題を解き終わったら
         if (count >= qText.length) {
-            //問題文と解答ボタンを非表示にして合計点表示
-            Q.setVisibility(View.GONE);
-            rGroup.setVisibility(View.GONE);
-            btnPlay.setVisibility(View.GONE);
-            tv.setText("全問終了\n" + ansCount + "点です。");
+            //DBに回答結果を書き込み
+            SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
+            ContentValues values = new ContentValues();
+            SQLiteDatabase dbw = helper.getWritableDatabase();
+            values.put("score", ansCount);
+            dbw.update("resultdb", values, "_id = 4", null);
+            dbw.close();
+            //結果画面へ
+            Intent i=new Intent(this,ResultActivity.class);
+            startActivity(i);
+            finish();
             //まだ問題が残っている場合
         } else {
-            question();
+            question();//問題生成メソッドへ
         }
     }
 
+    /**
+     * 再生ボタンが押された時の処理
+     * @param view
+     */
     public void btnPlay(View view) {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        mediaPlayer.start();
+        mediaPlayer.start();//セットされた順番のファイル再生
     }
-
 
     /**
      * 問題がまだ残っている場合の処理
      */
     private void question() {
+        //問題に対応する音声ファイルの場所を配列化
         Integer[] qSound =
                 {R.raw.hashibutogarasu
                         , R.raw.niwatori
@@ -138,27 +148,28 @@ public class SoundQuizActivity extends AppCompatActivity {
                         , R.raw.uguisu
                         , R.raw.umineko
                 };
-
+        //問題に対応する音声ファイルをセット
         mediaPlayer = MediaPlayer.create(this, qSound[count]);
 
         //問題文と解答を順番に格納し、リストqArrayに送る
-        for (int i = 0; i < qText.length; i++) {
+        for (String[] string : qText) {
             ArrayList<String> tmpArray = new ArrayList<>();
-            tmpArray.add(qText[i][0]);
-            tmpArray.add(qText[i][1]);
-            tmpArray.add(qText[i][2]);
-            tmpArray.add(qText[i][3]);
-            tmpArray.add(qText[i][4]);
+            tmpArray.add(string[0]);
+            tmpArray.add(string[1]);
+            tmpArray.add(string[2]);
+            tmpArray.add(string[3]);
+            tmpArray.add(string[4]);
 
             qArray.add(tmpArray);
         }
         //qArrayのcount番目のデータを変数quizに入れておく
         final ArrayList<String> quiz = qArray.get(count);
+
         //問題文と解答用ボタンを表示し問題の番号表示
         Q.setVisibility(View.VISIBLE);
         rGroup.setVisibility(View.VISIBLE);
-        tv.setText("問題" + (count + 1));
-
+        String qNumber="問題" + (count + 1);
+        tv.setText(qNumber);
         Q.setText(quiz.get(0));//問題文をセット
         btnPlay.setVisibility(View.VISIBLE);
 
@@ -172,7 +183,7 @@ public class SoundQuizActivity extends AppCompatActivity {
         btn2.setText(quiz.get(1));
         btn3.setText(quiz.get(2));
         btn4.setText(quiz.get(3));
-
+        //4択部分の分岐処理
         rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -190,8 +201,9 @@ public class SoundQuizActivity extends AppCompatActivity {
                         pushAns = quiz.get(3);
 
                 }
-
+                //未選択でなければ
                 if (checkedId != -1) {
+                    //次へボタンを表示し再生停止
                     next.setVisibility(View.VISIBLE);
                     mediaPlayer.stop();
                 }

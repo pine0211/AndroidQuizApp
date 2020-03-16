@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,14 +28,16 @@ public class ImageQuizActivity extends AppCompatActivity {
     private int count;//問題の配列番号
     //ラジオグループとボタン
     private RadioGroup rGroup;
-    private RadioButton btn1;
-    private RadioButton btn2;
-    private RadioButton btn3;
-    private RadioButton btn4;
+    private RadioButton btn1, btn2, btn3, btn4;
     private ImageView view;
 
+    private int ansCount;//正解数
+
+    //ArrayList名qArrayを作成
+    ArrayList<ArrayList<String>> qArray = new ArrayList<>();
+
     //問題文と解答をつなげた配列qTextを作成
-    private String[][] qText = {
+    private final String[][] qText = {
             {"この犬の犬種は？\n", "チワワ", "柴犬", "ダックスフンド", "ゴールデンレトリバー"},
             {"この犬の犬種は？\n", "ダックスフンド", "柴犬", "プードル", "ゴールデンレトリバー"},
             {"この犬の犬種は？\n", "ゴールデンレトリバー", "チワワ", "プードル", "柴犬"},
@@ -41,10 +46,7 @@ public class ImageQuizActivity extends AppCompatActivity {
     };
     private Integer[] qImage;
 
-    public int ansCount;//正解数
 
-    //ArrayList名qArrayを作成
-    ArrayList<ArrayList<String>> qArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +64,11 @@ public class ImageQuizActivity extends AppCompatActivity {
         btn4 = findViewById(R.id.rdBtn4);
         view = findViewById(R.id.img1);
 
+        //タイトルと案内文を表示
+        tv.setText(R.string.q_img);
+        Q.setText(R.string.menu_img);
 
-        //最初に案内文を表示
-        tv.setText("次へをタップで開始します。");
-
-        //問題に進むまで解答用ラジオボタンと問題文は非表示
-        Q.setVisibility(View.GONE);
+        //問題に進むまで解答用ラジオボタンと画像表示部分は非表示
         rGroup.setVisibility(View.GONE);
         view.setVisibility(View.GONE);
 
@@ -86,8 +87,8 @@ public class ImageQuizActivity extends AppCompatActivity {
     /**
      * ActionBar内の「戻る」ボタンを押したときの処理
      *
-     * @param item
-     * @return
+     * @param item アクションバーのタップ判定
+     * @return タップ判定のtrue/false
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -99,27 +100,33 @@ public class ImageQuizActivity extends AppCompatActivity {
     }
 
     /**
-     * 次へボタンをタップした際の処理     *
+     * 次へボタンをタップした際の処理
      *
-     * @param view
+     * @param view 次へボタンのタップ判定
      */
     public void btnNext(View view) {
         //前の問題に解答している場合
         if (pushAns != null) {
-            check();
+            check();//判定メソッドへ
         }
         //解答ボタンを選択するまで「次へ」を隠す
         next.setVisibility(View.GONE);
         //すべての問題を解き終わったら
         if (count >= qText.length) {
-            //問題文と解答ボタンを非表示にして合計点表示
-            Q.setVisibility(View.GONE);
-            rGroup.setVisibility(View.GONE);
-            this.view.setVisibility(View.GONE);
-            tv.setText("全問終了\n" + ansCount + "点です。");
+            //DBに回答結果を書き込み
+            SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
+            ContentValues values = new ContentValues();
+            SQLiteDatabase dbw = helper.getWritableDatabase();
+            values.put("score", ansCount);
+            dbw.update("resultdb", values, "_id = 3", null);
+            dbw.close();
+            //結果画面へ
+            Intent i = new Intent(this, ResultActivity.class);
+            startActivity(i);
+            finish();
             //まだ問題が残っている場合
         } else {
-            question();
+            question();//問題生成メソッドへ
         }
     }
 
@@ -127,6 +134,7 @@ public class ImageQuizActivity extends AppCompatActivity {
      * 問題がまだ残っている場合の処理
      */
     private void question() {
+        //問題に対応する画像ファイルの場所を配列化
         Integer[] qImage ={
                 R.drawable.dog_chihuahua
                 , R.drawable.dog_dachshund_blacktan
@@ -135,27 +143,29 @@ public class ImageQuizActivity extends AppCompatActivity {
                 , R.drawable.dog_shibainu_brown};
 
         //問題文と解答を順番に格納し、リストqArrayに送る
-        for (int i = 0; i < qText.length; i++) {
+        for (String[] string : qText) {
             ArrayList<String> tmpArray = new ArrayList<>();
-            tmpArray.add(qText[i][0]);
-            tmpArray.add(qText[i][1]);
-            tmpArray.add(qText[i][2]);
-            tmpArray.add(qText[i][3]);
-            tmpArray.add(qText[i][4]);
+            tmpArray.add(string[0]);
+            tmpArray.add(string[1]);
+            tmpArray.add(string[2]);
+            tmpArray.add(string[3]);
+            tmpArray.add(string[4]);
 
             qArray.add(tmpArray);
         }
         //qArrayのcount番目のデータを変数quizに入れておく
         final ArrayList<String> quiz = qArray.get(count);
+
         //問題文と解答用ボタンを表示し問題の番号表示
         Q.setVisibility(View.VISIBLE);
         rGroup.setVisibility(View.VISIBLE);
         view.setVisibility(View.VISIBLE);
-        tv.setText("問題" + (count + 1));
+        String qNumber="問題" + (count + 1);
+        tv.setText(qNumber);
 
         Q.setText(quiz.get(0));//問題文をセット
-
-        view.setImageResource(qImage[count]);//
+        //画像をセット
+        view.setImageResource(qImage[count]);
 
         trueAns = quiz.get(1);//正解をセット
         quiz.remove(0);//問題文を削除
@@ -167,7 +177,7 @@ public class ImageQuizActivity extends AppCompatActivity {
         btn2.setText(quiz.get(1));
         btn3.setText(quiz.get(2));
         btn4.setText(quiz.get(3));
-
+        //4択部分の分岐処理
         rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -185,8 +195,9 @@ public class ImageQuizActivity extends AppCompatActivity {
                         pushAns = quiz.get(3);
 
                 }
-
+                //未選択でなければ
                 if (checkedId != -1) {
+                    //次へボタンを表示
                     next.setVisibility(View.VISIBLE);
                 }
             }
@@ -206,6 +217,6 @@ public class ImageQuizActivity extends AppCompatActivity {
         pushAns = null;//解答部分を初期化
         rGroup.clearCheck();//ボタン選択解除
 
-
     }
+
 }
