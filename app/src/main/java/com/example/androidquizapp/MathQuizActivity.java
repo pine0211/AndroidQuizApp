@@ -231,6 +231,13 @@ public class MathQuizActivity extends AppCompatActivity {
             }
             Anum.add(num);
         }
+        //問題文誤回答生成用のランダム数をリスト化し重複防止のシャッフル処理
+        ArrayList<Integer> wrongList = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            wrongList.add(i);
+        }
+        Collections.shuffle(wrongList);
+
         //問題文と回答文を格納
         AnsGroup = new ArrayList<ArrayList<String>>();
         int ans, num2, num3, num4;
@@ -238,6 +245,7 @@ public class MathQuizActivity extends AppCompatActivity {
             ArrayList<String> num = new ArrayList<>();
             for (int j = 0; j < 5; j++) {
                 ans = Integer.parseInt(Anum.get(i).get(0));
+
                 switch (j) {
                     case 0:
                         //問題文
@@ -253,24 +261,20 @@ public class MathQuizActivity extends AppCompatActivity {
                         break;
                     case 2:
                         //回答1
-                        num2 = Integer.parseInt((Anum.get(i).get(0)) + r.nextInt(9));
-                        if (Integer.parseInt(Anum.get(i).get(0)) == num2) {
-                            num2 = num2 + 1;
-                        }
+                        num2 = ans + wrongList.get(0);
                         num.add(String.valueOf(num2));
                         break;
                     case 3:
                         //回答2
-                        int minus = Integer.parseInt(Anum.get(i).get(0)) - 1;
-                        minus = minus - r.nextInt(9);
-                        num.add(String.valueOf(minus));
+                        num3 = ans + wrongList.get(1);
+                        num.add(String.valueOf(num3));
                         break;
                     case 4:
                         //回答3
-                        num.add(String.valueOf(
-                                Integer.parseInt(Anum.get(i).get(0))
-                                        * (r.nextInt(3) + 2)));
+                        num4 = ans +wrongList.get(2);
+                        num.add(String.valueOf(num4));
                         break;
+                    default:
                 }
                 AnsGroup.add(num);
             }

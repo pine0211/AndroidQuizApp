@@ -3,7 +3,6 @@ package com.example.androidquizapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -25,6 +23,7 @@ public class StringQuizActivity extends AppCompatActivity {
     private String trueAns;//該当する問題の正解
     private String pushAns;//ラジオボタンで選択された解答
     private int count;//問題の配列番号
+
     //ラジオグループとボタン
     private RadioGroup rGroup;
     private RadioButton btn1, btn2, btn3, btn4;
