@@ -102,6 +102,7 @@ public class SoundQuizActivity extends AppCompatActivity {
      * @param view 次へボタンのタップ判定
      */
     public void btnNext(View view) {
+
         //前の問題に解答している場合
         if (pushAns != null) {
             check();//判定メソッドへ
@@ -110,6 +111,7 @@ public class SoundQuizActivity extends AppCompatActivity {
         next.setVisibility(View.GONE);
         //すべての問題を解き終わったら
         if (count >= qText.length) {
+
             //DBに回答結果を書き込み
             SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
             ContentValues values = new ContentValues();
@@ -208,7 +210,6 @@ public class SoundQuizActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     /**
@@ -222,7 +223,6 @@ public class SoundQuizActivity extends AppCompatActivity {
         count++;//次の問題番号に進める
         pushAns = null;//解答部分を初期化
         rGroup.clearCheck();//ボタン選択解除
-
-
+        mediaPlayer.stop();
     }
 }
