@@ -149,9 +149,11 @@ public class MathQuizActivity extends AppCompatActivity {
             ArrayList<Integer> num = new ArrayList<>();
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
-                    num.add(Math.max(randNum.get(i).get(j), randNum.get(i).get(j + 1)));
+                    num.add(Math.max(randNum.get(i).get(j)
+                            , randNum.get(i).get(j + 1)));
                 } else {
-                    num.add(Math.min(randNum.get(i).get(j), randNum.get(i).get(j - 1)));
+                    num.add(Math.min(randNum.get(i).get(j)
+                            , randNum.get(i).get(j - 1)));
                 }
                 randInt.add(num);
             }
@@ -187,19 +189,23 @@ public class MathQuizActivity extends AppCompatActivity {
                         switch (j) {
                             case 0:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0) + randInt.get(i).get(1)));
+                                        randInt.get(i).get(0)
+                                                + randInt.get(i).get(1)));
                                 break;
                             case 1:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0) - randInt.get(i).get(1)));
+                                        randInt.get(i).get(0)
+                                                - randInt.get(i).get(1)));
                                 break;
                             case 2:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0) * randInt.get(i).get(1)));
+                                        randInt.get(i).get(0)
+                                                * randInt.get(i).get(1)));
                                 break;
                             case 3:
                                 ansStr.add(String.valueOf(
-                                        randInt.get(i).get(0) / randInt.get(i).get(1)));
+                                        randInt.get(i).get(0)
+                                                / randInt.get(i).get(1)));
                                 break;
                         }
                     } else if (k == 2) {
