@@ -1,6 +1,7 @@
 package com.example.androidquizapp;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -34,6 +36,13 @@ public class ResultActivity extends AppCompatActivity {
         resultView = findViewById(R.id.res_list);
         del = findViewById(R.id.btn_delete);
 
+        //DB名
+        //カラム名
+        //WHERE句の列名
+        //WHERE句の値
+        //GROUP BY句の値
+        //HAVING句の値
+        //ORDER BY句の値
         Cursor cursor = db.query("resultdb",//DB名
                 new String[]{"title", "score"},//カラム名
                 null,//WHERE句の列名
@@ -82,9 +91,10 @@ public class ResultActivity extends AppCompatActivity {
 
     public void delete(View view) {
         deleteDatabase(helper.getDatabaseName());
-        textView.setText(R.string.msg_del);
+        Context context=getApplicationContext();
+        deleteDatabase(helper.getDatabaseName());
+        Toast.makeText(context,R.string.msg_del,Toast.LENGTH_SHORT).show();
         resultView.setVisibility(View.GONE);
-        del.setVisibility(View.GONE);
 
     }
 

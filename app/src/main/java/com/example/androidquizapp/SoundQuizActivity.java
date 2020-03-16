@@ -203,9 +203,8 @@ public class SoundQuizActivity extends AppCompatActivity {
                 }
                 //未選択でなければ
                 if (checkedId != -1) {
-                    //次へボタンを表示し再生停止
+                    //次へボタンを表示
                     next.setVisibility(View.VISIBLE);
-                    mediaPlayer.stop();
                 }
             }
         });
