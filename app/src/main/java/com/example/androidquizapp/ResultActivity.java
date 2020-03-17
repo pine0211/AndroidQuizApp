@@ -92,6 +92,10 @@ public class ResultActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 削除ボタンの処理
+     * @param view　view
+     */
     public void delete(View view) {
         Context context=getApplicationContext();
         deleteDatabase(helper.getDatabaseName());
