@@ -36,6 +36,7 @@ public class ResultActivity extends AppCompatActivity {
         resultView = findViewById(R.id.res_list);
         del = findViewById(R.id.btn_delete);
 
+        //DB取得Cursor作成
         Cursor cursor = db.query("resultdb",//DB名
                 new String[]{"title", "score"},//カラム名
                 null,//WHERE句の列名
@@ -44,8 +45,10 @@ public class ResultActivity extends AppCompatActivity {
                 null,//HAVING句の値
                 null//ORDER BY句の値
         );
+        //最初からCursorを取得し、StringBuilderで文字列生成
         cursor.moveToFirst();
         StringBuilder builder = new StringBuilder();
+        //合計以外を文字列生成
         for (int i = 0; i < cursor.getCount() - 1; i++) {
             if (cursor.getInt(1) == -1) {
                 cursor.moveToNext();
@@ -57,10 +60,12 @@ public class ResultActivity extends AppCompatActivity {
             builder.append("点\n\n");
             cursor.moveToNext();
         }
+        //合計部分を文字生成
         builder.append(cursor.getString(0));
         builder.append(total);
         builder.append("点\n\n");
         cursor.close();
+
         resultView.setText(builder.toString());
 
         textView.setText(R.string.finish);
@@ -72,7 +77,12 @@ public class ResultActivity extends AppCompatActivity {
 
         }
     }
-
+    /**
+     * ActionBar内の「戻る」ボタンを押したときの処理
+     *
+     * @param item アクションバーのタップ判定
+     * @return タップ判定のtrue/false
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -83,7 +93,6 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     public void delete(View view) {
-        deleteDatabase(helper.getDatabaseName());
         Context context=getApplicationContext();
         deleteDatabase(helper.getDatabaseName());
         Toast.makeText(context, R.string.msg_del,Toast.LENGTH_SHORT).show();
