@@ -112,7 +112,7 @@ public class SoundQuizActivity extends AppCompatActivity {
         //すべての問題を解き終わったら
         if (count >= qText.length) {
 
-            //DBに回答結果を書き込み
+            //DBに解答結果を書き込み
             SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
             ContentValues values = new ContentValues();
             SQLiteDatabase dbw = helper.getWritableDatabase();

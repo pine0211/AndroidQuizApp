@@ -98,7 +98,7 @@ public class MathQuizActivity extends AppCompatActivity {
         next.setVisibility(View.GONE);
         //すべての問題を解き終わったら
         if (count >= qLength) {
-            //DBに回答結果を書き込み
+            //DBに解答結果を書き込み
             SQLOpenHelper helper = new SQLOpenHelper(getApplicationContext());
             ContentValues values = new ContentValues();
             SQLiteDatabase dbw = helper.getWritableDatabase();
@@ -221,15 +221,15 @@ public class MathQuizActivity extends AppCompatActivity {
             }
             anum.add(num);
         }
-        //問題文誤回答生成用のランダム数をリスト化
+        //問題文誤解答生成用のランダム数をリスト化
         ArrayList<Integer> wrongList = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             wrongList.add(i);
         }
         Collections.shuffle(wrongList);
 
-        //問題文と回答文を格納
-        //表示する問題文と回答項目を格納
+        //問題文と解答文を格納
+        //表示する問題文と解答項目を格納
         ArrayList<ArrayList<String>> ansGroup = new ArrayList<>();
         int ans, num2, num3, num4;
         for (int i = 0; i < qLength; i++) {
@@ -251,7 +251,7 @@ public class MathQuizActivity extends AppCompatActivity {
                         num.add(String.valueOf(ans));
                         break;
                     case 2:
-                        //回答1
+                        //解答1
                         int check = r.nextInt(2);
                         if (check == 0) {
                             num2 = ans + wrongList.get(0);
@@ -262,7 +262,7 @@ public class MathQuizActivity extends AppCompatActivity {
                         }
                         break;
                     case 3:
-                        //回答2
+                        //解答2
                         int check2 = r.nextInt(2);
                         if (check2 == 0) {
                             num3 = ans + wrongList.get(1);
@@ -272,7 +272,7 @@ public class MathQuizActivity extends AppCompatActivity {
                             num.add(String.valueOf(num3));
                         }
                     case 4:
-                        //回答3
+                        //解答3
                         int check3 = r.nextInt(2);
                         if (check3 == 0) {
                             num4 = ans + wrongList.get(2);
