@@ -237,7 +237,8 @@ public class MathQuizActivity extends AppCompatActivity {
         for (int i = 0; i < qLength; i++) {
             ArrayList<String> num = new ArrayList<>();
             for (int j = 0; j < 5; j++) {
-                String ans= Anum.get(i).get(0);
+                String ans = Anum.get(i).get(0);
+                int check = 0;
                 switch (j) {
                     case 0:
                         num.add(randInt.get(i).get(0)
@@ -250,19 +251,28 @@ public class MathQuizActivity extends AppCompatActivity {
                         num.add(ans);
                         break;
                     case 2:
-                        num.add(String.valueOf(
-                                Integer.parseInt(ans)
-                                        + (r.nextInt(9) + 1)));
+                        check=r.nextInt(2);
+                        if (check == 0) {
+                            num.add(String.valueOf(Integer.parseInt(ans) + 1));
+                        } else if (check == 1) {
+                            num.add(String.valueOf(Integer.parseInt(ans) - 1));
+                        }
                         break;
                     case 3:
-                        num.add(String.valueOf(
-                                Integer.parseInt(ans)
-                                        - (r.nextInt(9) + 1)));
+                        check=r.nextInt(2);
+                        if (check == 0) {
+                            num.add(String.valueOf(Integer.parseInt(ans) + 5));
+                        } else if (check == 1) {
+                            num.add(String.valueOf(Integer.parseInt(ans) - 5));
+                        }
                         break;
                     case 4:
-                        num.add(String.valueOf(
-                                Integer.parseInt(ans)
-                                        * (r.nextInt(3) + 2)));
+                        check=r.nextInt(2);
+                        if (check == 0) {
+                            num.add(String.valueOf(Integer.parseInt(ans)+ 10));
+                        }else if (check == 1) {
+                            num.add(String.valueOf(Integer.parseInt(ans)- 10));
+                        }
                         break;
                 }
                 AnsGroup.add(num);
