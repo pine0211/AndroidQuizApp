@@ -2,6 +2,7 @@
     <string name="app_name">sQuiiiiz</string>
     <string name="app_start">タップでスタート</string>
     <string name="menu_title">問題選択</string>
+    <string name="question">問題</string>
     <string name="q_str">地理問題</string>
     <string name="q_math">計算問題</string>
     <string name="q_img">画像問題</string>

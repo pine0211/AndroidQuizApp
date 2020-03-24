@@ -146,8 +146,7 @@ public class StringQuizActivity extends AppCompatActivity {
         //問題文と解答用ボタンを表示し問題の番号表示
         Q.setVisibility(View.VISIBLE);
         rGroup.setVisibility(View.VISIBLE);
-        String qNumber = "問題" + (count + 1);
-        tv.setText(qNumber);
+        tv.setText("問題" + (count + 1));
         Q.setText(quiz.get(0));//問題文をセット
         trueAns = quiz.get(1);//正解をセット
         quiz.remove(0);//問題文を削除

@@ -117,7 +117,7 @@ public class MathQuizActivity extends AppCompatActivity {
             ContentValues values = new ContentValues();
             SQLiteDatabase dbw = helper.getWritableDatabase();
             values.put("score", ansCount);
-            dbw.update("resultdb", values, "_id = 1", null);
+            dbw.update("resultdb", values, "_id = 2", null);
             dbw.close();
             //結果画面へ
             Intent i = new Intent(this, ResultActivity.class);
